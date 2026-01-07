@@ -6,6 +6,11 @@ const WEBHOOK_URL = import.meta.env.DEV
     ? '/api/webhook/ia-whatsapp-flow'
     : 'https://webhook.garagem.dev.br/webhook/ia-whatsapp-flow'
 
+// Gera um sessionId aleatório
+const generateSessionId = () => {
+    return 'sess_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36)
+}
+
 function App() {
     const [prompt, setPrompt] = useState('')
     const [loading, setLoading] = useState(false)
@@ -22,12 +27,17 @@ function App() {
         setCopied(false)
 
         try {
+            const sessionId = generateSessionId()
+
             const response = await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ prompt: prompt.trim() }),
+                body: JSON.stringify({
+                    prompt: prompt.trim(),
+                    sessionId: sessionId
+                }),
             })
 
             if (!response.ok) {
