@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import './App.css'
 
-const WEBHOOK_URL = '/api/webhook/ia-whatsapp-flow'
+// Em desenvolvimento usa proxy, em produção usa URL direta
+const WEBHOOK_URL = import.meta.env.DEV
+    ? '/api/webhook/ia-whatsapp-flow'
+    : 'https://webhook.garagem.dev.br/webhook/ia-whatsapp-flow'
 
 function App() {
     const [prompt, setPrompt] = useState('')
